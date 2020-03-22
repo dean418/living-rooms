@@ -6,21 +6,20 @@ export class Canvas {
         this.height = window.innerHeight;
         this.textEntities = textEntity;
     }
+    init() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        window.requestAnimationFrame(this.main.bind(this));
+    }
     main() {
         this.ctx.clearRect(0, 0, this.width, this.height);
         for (let i = 0; i < this.textEntities.length; i++) {
             this.textEntities[i].drawText();
             for (let j = 0; j < this.textEntities.length; j++) {
                 if (i != j && this.textEntities[j].intersects(this.textEntities[i])) {
-                    console.log('ABUSE!!!!');
                 }
             }
         }
-        window.requestAnimationFrame(this.main.bind(this));
-    }
-    init() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
         window.requestAnimationFrame(this.main.bind(this));
     }
 }

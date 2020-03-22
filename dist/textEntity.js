@@ -21,6 +21,26 @@ export class TextEntity extends Canvas {
     get right() {
         return this.x + this.textWidth;
     }
+    drawText() {
+        this.styleText();
+        this.checkBounds();
+        this.ctx.fillText(this.value, this.x, this.y);
+    }
+    intersects(entity) {
+        if (this.top > entity.bottom) {
+            return false;
+        }
+        if (this.right < entity.left) {
+            return false;
+        }
+        if (this.bottom < entity.top) {
+            return false;
+        }
+        if (this.left > entity.right) {
+            return false;
+        }
+        return true;
+    }
     genCoord(max) {
         let coord = Math.random() * max;
         return coord;
@@ -46,25 +66,5 @@ export class TextEntity extends Canvas {
         }
         this.x += this.dx;
         this.y += this.dy;
-    }
-    drawText() {
-        this.styleText();
-        this.checkBounds();
-        this.ctx.fillText(this.value, this.x, this.y);
-    }
-    intersects(entity) {
-        if (this.top > entity.bottom) {
-            return false;
-        }
-        if (this.right < entity.left) {
-            return false;
-        }
-        if (this.bottom < entity.top) {
-            return false;
-        }
-        if (this.left > entity.right) {
-            return false;
-        }
-        return true;
     }
 }
