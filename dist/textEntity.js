@@ -1,8 +1,8 @@
 import { Canvas } from './canvas.js';
 export class TextEntity extends Canvas {
-    constructor(value) {
+    constructor(text) {
         super();
-        this.value = value;
+        this.text = text;
         this.styleText();
         this.x = this.genCoord(this.width - this.textWidth);
         this.y = this.genCoord(this.height - parseInt(this.ctx.font));
@@ -24,7 +24,7 @@ export class TextEntity extends Canvas {
     drawText() {
         this.styleText();
         this.checkBounds();
-        this.ctx.fillText(this.value, this.x, this.y);
+        this.ctx.fillText(this.text, this.x, this.y);
     }
     intersects(entity) {
         if (this.top > entity.bottom) {
@@ -55,7 +55,7 @@ export class TextEntity extends Canvas {
     styleText() {
         this.ctx.font = '28pt arial';
         this.ctx.fillStyle = 'white';
-        this.textWidth = this.ctx.measureText(this.value).width;
+        this.textWidth = this.ctx.measureText(this.text).width;
     }
     checkBounds() {
         if (this.y + this.dy > this.canvas.height || this.y + this.dy < parseInt(this.ctx.font)) {

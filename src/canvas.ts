@@ -25,12 +25,37 @@ export class Canvas {
 		for (let i = 0; i < this.textEntities.length; i++) {
 			this.textEntities[i].drawText();
 			for(let j = 0; j < this.textEntities.length; j++) {
-				if (i != j && this.textEntities[j].intersects(this.textEntities[i])) {
-					// collision detected
+				if (i != j && this.textEntities[i].intersects(this.textEntities[j])) {
+					this.handleCollision(this.textEntities[i], this.textEntities[j]);
 				}
 			}
-
 		}
 		window.requestAnimationFrame(this.main.bind(this));
+	}
+
+	private handleCollision(subject, collider) {
+		let entities: Set<any> = new Set();
+
+		entities.add(subject.text);
+		entities.add(collider.text);
+
+		if(entities.has('male') && entities.has('female')) {
+			//create children
+		}
+
+		if (entities.has('virus') && entities.size > 1) {
+			// kill entity
+		}
+
+		if (entities.has('male') || entities.has('female') && entities.has('food')) {
+			// speed boost
+		}
+
+		/**
+		 * male + female = child
+		 * male/female/child + virus = dead
+		 * male/female + food = speed boost
+		 *
+		 */
 	}
 }

@@ -16,10 +16,13 @@ export class Canvas {
         for (let i = 0; i < this.textEntities.length; i++) {
             this.textEntities[i].drawText();
             for (let j = 0; j < this.textEntities.length; j++) {
-                if (i != j && this.textEntities[j].intersects(this.textEntities[i])) {
+                if (i != j && this.textEntities[i].intersects(this.textEntities[j])) {
+                    this.handleCollision(this.textEntities[i], this.textEntities[j]);
                 }
             }
         }
         window.requestAnimationFrame(this.main.bind(this));
+    }
+    handleCollision(subject, collider) {
     }
 }

@@ -1,16 +1,16 @@
 import {Canvas} from './canvas.js';
 
 export abstract class TextEntity extends Canvas {
-	private value: string;
+	protected text: string;
 	private textWidth: number;
 	private x: number;
 	private y: number;
 	private dx: number;
 	private dy: number;
 
-	constructor(value: string) {
+	constructor(text: string) {
 		super();
-		this.value = value;
+		this.text = text;
 
 		this.styleText();
 
@@ -39,10 +39,10 @@ export abstract class TextEntity extends Canvas {
 	public drawText(): void {
 		this.styleText();
 		this.checkBounds();
-		this.ctx.fillText(this.value, this.x, this.y);
+		this.ctx.fillText(this.text, this.x, this.y);
 	}
 
-	public intersects(entity): boolean {
+	public intersects(entity: TextEntity): boolean {
 
 		if(this.top > entity.bottom) {
 			return false;
@@ -81,7 +81,7 @@ export abstract class TextEntity extends Canvas {
 	private styleText(): void {
 		this.ctx.font = '28pt arial';
 		this.ctx.fillStyle = 'white';
-		this.textWidth = this.ctx.measureText(this.value).width;
+		this.textWidth = this.ctx.measureText(this.text).width;
 	}
 
 	private checkBounds(): void {
