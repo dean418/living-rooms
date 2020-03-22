@@ -43,19 +43,12 @@ export class Canvas {
 			//create children
 		}
 
-		if (entities.has('virus') && entities.size > 1) {
+		if (entities.has('virus') && entities.size > 1 && !entities.has('food')) {
 			// kill entity
 		}
 
 		if (entities.has('male') || entities.has('female') && entities.has('food')) {
 			// speed boost
 		}
-
-		/**
-		 * male + female = child
-		 * male/female/child + virus = dead
-		 * male/female + food = speed boost
-		 *
-		 */
 	}
 }
