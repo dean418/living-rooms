@@ -1,6 +1,8 @@
 import { Canvas } from './canvas.js';
 import { Person } from './person.js';
-let male = new Person();
-let female = new Person();
-let canvas = new Canvas([male, female]);
+import { Virus } from './virus.js';
+let male = new Person(20);
+let female = new Person(20);
+let virus = new Virus();
+let canvas = new Canvas([male, female, virus]);
 canvas.init();

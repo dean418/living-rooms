@@ -24,5 +24,20 @@ export class Canvas {
         window.requestAnimationFrame(this.main.bind(this));
     }
     handleCollision(subject, collider) {
+        let entities = new Set();
+        entities.add(subject.text);
+        entities.add(collider.text);
+        if (entities.has('male') && entities.has('female')) {
+        }
+        if (entities.has('virus') && entities.size > 1 && !entities.has('food')) {
+            this.removeEntity(subject);
+            this.removeEntity(collider);
+        }
+        if (entities.has('male') || entities.has('female') && entities.has('food')) {
+        }
+    }
+    removeEntity(entity) {
+        let index = this.textEntities.indexOf(entity);
+        this.textEntities.splice(index, 1);
     }
 }

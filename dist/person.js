@@ -1,6 +1,6 @@
 import { TextEntity } from './textEntity.js';
 export class Person extends TextEntity {
-    constructor(age = 15) {
+    constructor(age = 0) {
         super(undefined);
         this.age = age;
         this.dead = false;

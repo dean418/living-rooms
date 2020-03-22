@@ -44,11 +44,17 @@ export class Canvas {
 		}
 
 		if (entities.has('virus') && entities.size > 1 && !entities.has('food')) {
-			// kill entity
+				this.removeEntity(subject);
+				this.removeEntity(collider);
 		}
 
 		if (entities.has('male') || entities.has('female') && entities.has('food')) {
 			// speed boost
 		}
+	}
+
+	private removeEntity(entity): void {
+		let index = this.textEntities.indexOf(entity);
+		this.textEntities.splice(index, 1);
 	}
 }
