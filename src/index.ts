@@ -14,6 +14,18 @@ class Main extends Canvas{
 		window.requestAnimationFrame(this.main.bind(this));
 	}
 
+	private genRandInt(min: number, max: number): number {
+		let randInt: number = Math.floor(Math.random() * (max - min + 1)) + min;
+
+		let positive = Math.round(Math.random())
+
+		if (positive) {
+			return randInt;
+		}
+
+		return -randInt;
+	}
+
 	private main(): void {
 		this.ctx.clearRect(0, 0, this.width, this.height);
 
@@ -36,16 +48,35 @@ class Main extends Canvas{
 		entities.add(collider.text);
 
 		if(entities.has('male') && entities.has('female')) {
-			let thing = new Person();
+			this.handlePersonCollision(subject, collider);
 		}
 
 		if (entities.has('virus') && entities.size > 1 && !entities.has('food')) {
-				this.removeEntity(subject);
-				this.removeEntity(collider);
+			this.removeEntity(subject);
+			this.removeEntity(collider);
 		}
 
 		if (entities.has('male') || entities.has('female') && entities.has('food')) {
 			// speed boost
+		}
+	}
+
+	private handlePersonCollision(subject: TextEntity, collider: TextEntity): void {
+		for (const arg of arguments) {
+			if (arg.text == 'female') {
+				arg.text = 'mother';
+			} else {
+				arg.text = 'father';
+			}
+		}
+
+		for (let i = 0; i < 5; i++) {
+			let child: Person = new Person();
+
+			child.x = subject.x + this.genRandInt(50, 100);
+			child.y = collider.y + this.genRandInt(50, 100);
+
+			this.textEntities.push(child);
 		}
 	}
 

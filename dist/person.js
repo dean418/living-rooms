@@ -4,7 +4,13 @@ export class Person extends TextEntity {
         super(undefined);
         this.age = age;
         this.dead = false;
-        this.gender = Math.round(Math.random());
+        this.oddEven = Math.round(Math.random());
+        if (this.oddEven) {
+            this.gender = 'male';
+        }
+        else {
+            this.gender = 'female';
+        }
         this.updateAge();
         this.checkAge();
     }
@@ -13,17 +19,16 @@ export class Person extends TextEntity {
             this.text = 'child';
             return;
         }
-        if (this.gender) {
-            this.text = 'male';
+        if (this.text == 'mother' || this.text == 'father') {
+            return;
         }
-        else {
-            this.text = 'female';
-        }
+        this.text = this.gender;
     }
     updateAge() {
         setInterval(() => {
             this.age++;
             this.checkAge();
+            console.log(this.age);
         }, 1000);
     }
 }

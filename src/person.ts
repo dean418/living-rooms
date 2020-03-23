@@ -1,16 +1,23 @@
 import {TextEntity} from './textEntity.js';
 
 export class Person extends TextEntity {
-	age: number;
-	dead: boolean;
-	gender: number;
+	public dead: boolean;
+	private age: number;
+	private gender: string;
+	private oddEven: number;
 
 	constructor(age: number=0) {
 		super(undefined);
 
 		this.age = age;
 		this.dead = false;
-		this.gender = Math.round(Math.random());
+		this.oddEven = Math.round(Math.random());
+
+		if(this.oddEven) {
+			this.gender = 'male';
+		} else {
+			this.gender = 'female';
+		}
 
 		this.updateAge();
 		this.checkAge();
@@ -22,17 +29,19 @@ export class Person extends TextEntity {
 			return;
 		}
 
-		if(this.gender) {
-			this.text = 'male';
-		} else {
-			this.text = 'female';
+		if (this.text == 'mother' || this.text == 'father') {
+			return;
 		}
+
+		this.text = this.gender;
 	}
 
 	private updateAge(): void {
 		setInterval(() => {
 			this.age++;
 			this.checkAge();
+			console.log(this.age);
+
 		}, 1000);
 	}
 }

@@ -3,8 +3,8 @@ import {Canvas} from './canvas.js';
 export abstract class TextEntity extends Canvas {
 	protected text: string;
 	private textWidth: number;
-	private x: number;
-	private y: number;
+	public x: number;
+	public y: number;
 	private dx: number;
 	private dy: number;
 
