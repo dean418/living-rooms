@@ -3,7 +3,7 @@ export class Person extends TextEntity {
     constructor(age = 0) {
         super(undefined);
         this.age = age;
-        this.dead = false;
+        this.expired = false;
         this.oddEven = Math.round(Math.random());
         if (this.oddEven) {
             this.gender = 'male';
@@ -15,11 +15,18 @@ export class Person extends TextEntity {
         this.checkAge();
     }
     checkAge() {
-        if (this.age < 20) {
-            this.text = 'child';
+        if (this.expired) {
+            return;
+        }
+        if (this.age > 40) {
+            this.expire();
             return;
         }
         if (this.text == 'mother' || this.text == 'father') {
+            return;
+        }
+        if (this.age < 20) {
+            this.text = 'child';
             return;
         }
         this.text = this.gender;
@@ -30,5 +37,9 @@ export class Person extends TextEntity {
             this.checkAge();
             console.log(this.age);
         }, 1000);
+    }
+    expire() {
+        this.expired = true;
+        this.text = 'dead';
     }
 }

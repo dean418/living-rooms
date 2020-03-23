@@ -29,11 +29,18 @@ class Main extends Canvas{
 	private main(): void {
 		this.ctx.clearRect(0, 0, this.width, this.height);
 
-		for (let i = 0; i < this.textEntities.length; i++) {
-			this.textEntities[i].drawText();
-			for(let j = 0; j < this.textEntities.length; j++) {
+		for (let i = this.textEntities.length-1; i >= 0; i--) {
+
+			if (this.textEntities[i].expired) {
+				this.removeEntity(this.textEntities[i], 5000);
+			}
+
+			this.textEntities[i].drawText(this.textEntities[i].expired);
+
+			for(let j = this.textEntities.length-1; j >= 0; j--) {
 				if (i != j && this.textEntities[i].intersects(this.textEntities[j])) {
 					this.handleCollision(this.textEntities[i], this.textEntities[j]);
+					break;
 				}
 			}
 		}
@@ -49,11 +56,12 @@ class Main extends Canvas{
 
 		if(entities.has('male') && entities.has('female')) {
 			this.handlePersonCollision(subject, collider);
+			return
 		}
 
-		if (entities.has('virus') && entities.size > 1 && !entities.has('food')) {
-			this.removeEntity(subject);
-			this.removeEntity(collider);
+		if (entities.has('virus') && entities.size > 1 && !entities.has('dead')) {
+			this.handleVirusCollision(subject, collider);
+			return;
 		}
 
 		if (entities.has('male') || entities.has('female') && entities.has('food')) {
@@ -80,15 +88,29 @@ class Main extends Canvas{
 		}
 	}
 
-	private removeEntity(entity): void {
-		let index = this.textEntities.indexOf(entity);
-		this.textEntities.splice(index, 1);
+	private handleVirusCollision(subject: TextEntity, collider: TextEntity): void {
+		for (const entity of arguments) {
+			if (entity.text == 'virus') {
+				this.removeEntity(entity);
+				continue;
+			}
+
+			entity.expire();
+			this.removeEntity(entity, 5000);
+		}
+	}
+
+	private removeEntity(entity: TextEntity, time: number=0): void {
+		setTimeout(() => {
+			let index = this.textEntities.indexOf(entity);
+			this.textEntities.splice(index, 1);
+		}, time)
 	}
 }
 
 let male = new Person(20);
 let female = new Person(20);
-// let virus = new Virus();
+let virus = new Virus();
 
 let canvas = new Main([male, female]);
 canvas.init();

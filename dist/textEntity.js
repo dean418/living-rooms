@@ -21,9 +21,11 @@ export class TextEntity extends Canvas {
     get right() {
         return this.x + this.textWidth;
     }
-    drawText() {
+    drawText(expired = false) {
         this.styleText();
-        this.checkBounds();
+        if (!expired) {
+            this.checkBounds();
+        }
         this.ctx.fillText(this.text, this.x, this.y);
     }
     intersects(entity) {

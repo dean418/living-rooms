@@ -36,9 +36,13 @@ export abstract class TextEntity extends Canvas {
 		return this.x + this.textWidth;
 	}
 
-	public drawText(): void {
+	public drawText(expired: boolean=false): void {
 		this.styleText();
-		this.checkBounds();
+
+		if (!expired) {
+			this.checkBounds();
+		}
+
 		this.ctx.fillText(this.text, this.x, this.y);
 	}
 

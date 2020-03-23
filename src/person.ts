@@ -1,7 +1,7 @@
 import {TextEntity} from './textEntity.js';
 
 export class Person extends TextEntity {
-	public dead: boolean;
+	public expired: boolean;
 	private age: number;
 	private gender: string;
 	private oddEven: number;
@@ -10,7 +10,7 @@ export class Person extends TextEntity {
 		super(undefined);
 
 		this.age = age;
-		this.dead = false;
+		this.expired = false;
 		this.oddEven = Math.round(Math.random());
 
 		if(this.oddEven) {
@@ -24,14 +24,26 @@ export class Person extends TextEntity {
 	}
 
 	private checkAge():void {
-		if (this.age < 20) {
-			this.text = 'child';
+		if (this.expired) {
+			return;
+		}
+
+		if (this.age > 40) {
+			this.expire();
 			return;
 		}
 
 		if (this.text == 'mother' || this.text == 'father') {
 			return;
 		}
+
+		if (this.age < 20) {
+			this.text = 'child';
+			return;
+		}
+
+
+
 
 		this.text = this.gender;
 	}
@@ -43,5 +55,10 @@ export class Person extends TextEntity {
 			console.log(this.age);
 
 		}, 1000);
+	}
+
+	public expire(): void {
+		this.expired = true;
+		this.text = 'dead';
 	}
 }
