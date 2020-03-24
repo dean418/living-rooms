@@ -1,6 +1,6 @@
 import {Canvas} from './canvas.js';
 
-export abstract class TextEntity extends Canvas {
+export class TextEntity extends Canvas {
 	public ID: string;
 	public x: number;
 	public y: number;
@@ -18,7 +18,6 @@ export abstract class TextEntity extends Canvas {
 		this.y = this.genCoord(this.height - parseInt(this.ctx.font));
 		this.dx = this.genDirection();
 		this.dy = this.genDirection();
-
 	}
 
 	public get top(): number {
@@ -90,6 +89,9 @@ export abstract class TextEntity extends Canvas {
 	private styleText(): void {
 		this.ctx.font = '18pt arial';
 		this.ctx.fillStyle = 'white';
+		if (this.text == 'virus') {
+			this.ctx.fillStyle = 'green';
+		}
 		this.textWidth = this.ctx.measureText(this.text).width;
 	}
 

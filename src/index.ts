@@ -3,8 +3,8 @@ import {Person} from './person.js';
 
 let people: object = {};
 
-const loop = (canvas) => {
-    let randNum = canvas.genRandNum(40000, 50000);
+const loop = (canvas: Main): void => {
+    let randNum: number = canvas.genRandNum(10000, 11000);
 
     setTimeout(() => {
         canvas.outbreak();
@@ -12,15 +12,13 @@ const loop = (canvas) => {
     }, randNum);
 }
 
-const start = () => {
+const start = (): void => {
     for (let i = 0; i < 7; i++) {
-        let person = new Person(20);
-        console.log(person.ID);
-
+        let person: Person = new Person(20);
         people[person.ID] = person;
     }
 
-    let canvas = new Main(people);
+    let canvas: Main = new Main(people);
     canvas.init();
 
     loop(canvas);

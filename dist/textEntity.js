@@ -2,6 +2,7 @@ import { Canvas } from './canvas.js';
 export class TextEntity extends Canvas {
     constructor(text) {
         super();
+        this.ID = this.genID();
         this.text = text;
         this.styleText();
         this.x = this.genCoord(this.width - this.textWidth);
@@ -43,6 +44,9 @@ export class TextEntity extends Canvas {
         }
         return true;
     }
+    genID() {
+        return '_' + Math.random().toString(36).substr(2, 9);
+    }
     genCoord(max) {
         let coord = Math.random() * max;
         return coord;
@@ -57,6 +61,9 @@ export class TextEntity extends Canvas {
     styleText() {
         this.ctx.font = '18pt arial';
         this.ctx.fillStyle = 'white';
+        if (this.text == 'virus') {
+            this.ctx.fillStyle = 'green';
+        }
         this.textWidth = this.ctx.measureText(this.text).width;
     }
     checkBounds() {

@@ -1,6 +1,6 @@
 import { Canvas } from './canvas.js';
 import { Person } from './person.js';
-import { Virus } from './virus.js';
+import { TextEntity } from './textEntity.js';
 export class Main extends Canvas {
     constructor(entities) {
         super(entities);
@@ -18,21 +18,25 @@ export class Main extends Canvas {
         }
         return -randInt;
     }
+    testObject() {
+        Object.keys(this.textEntities).forEach((key) => {
+            let entity = this.textEntities[key];
+            if (entity.expired && !entity.hasExpired) {
+                entity.hasExpired = true;
+                this.removeEntity(entity, 5000);
+            }
+            entity.drawText(entity.expired);
+            Object.keys(this.textEntities).forEach((comparisonKey) => {
+                let comparison = this.textEntities[comparisonKey];
+                if (entity.ID != comparison.ID && entity.intersects(comparison)) {
+                    this.handleCollision(entity, comparison);
+                }
+            });
+        });
+    }
     main() {
         this.ctx.clearRect(0, 0, this.width, this.height);
-        for (let i = this.textEntities.length - 1; i >= 0; i--) {
-            if (this.textEntities[i].expired && !this.textEntities[i].hasExpired) {
-                this.textEntities[i].hasExpired = true;
-                this.removeEntity(this.textEntities[i], 5000);
-            }
-            this.textEntities[i].drawText(this.textEntities[i].expired);
-            for (let j = this.textEntities.length - 1; j >= 0; j--) {
-                if (i != j && this.textEntities[i].intersects(this.textEntities[j])) {
-                    this.handleCollision(this.textEntities[i], this.textEntities[j]);
-                    break;
-                }
-            }
-        }
+        this.testObject();
         window.requestAnimationFrame(this.main.bind(this));
     }
     handleCollision(subject, collider) {
@@ -63,7 +67,7 @@ export class Main extends Canvas {
             let child = new Person();
             child.x = subject.x + this.genRandInt(50, 100);
             child.y = collider.y + this.genRandInt(50, 100);
-            this.textEntities.push(child);
+            this.textEntities[child.ID] = child;
         }
     }
     handleVirusCollision(subject, collider) {
@@ -85,13 +89,13 @@ export class Main extends Canvas {
     }
     async removeEntity(entity, time = 0) {
         await this.pause(time);
-        let index = this.textEntities.indexOf(entity);
-        this.textEntities.splice(index, 1);
+        delete this.textEntities[entity.ID];
     }
     outbreak() {
         setTimeout(() => {
-            for (let i = 0; i < 5; i++) {
-                this.textEntities.push(new Virus());
+            for (let i = 0; i < this.genRandNum(10, 15); i++) {
+                let virus = new TextEntity('virus');
+                this.textEntities[virus.ID] = virus;
             }
         }, 10000);
     }

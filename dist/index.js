@@ -1,8 +1,8 @@
 import { Main } from './main.js';
 import { Person } from './person.js';
-let people = [];
+let people = {};
 const loop = (canvas) => {
-    let randNum = canvas.genRandNum(40000, 50000);
+    let randNum = canvas.genRandNum(10000, 11000);
     setTimeout(() => {
         canvas.outbreak();
         loop(canvas);
@@ -10,7 +10,8 @@ const loop = (canvas) => {
 };
 const start = () => {
     for (let i = 0; i < 7; i++) {
-        people.push(new Person(20));
+        let person = new Person(20);
+        people[person.ID] = person;
     }
     let canvas = new Main(people);
     canvas.init();

@@ -1,10 +1,9 @@
 import {Canvas} from './canvas.js';
 import {Person} from './person.js';
 import { TextEntity } from './textEntity.js';
-import { Virus } from './virus.js';
 
 export class Main extends Canvas{
-	constructor(entities: any) {
+	constructor(entities: object) {
 		super(entities);
 	}
 
@@ -16,43 +15,43 @@ export class Main extends Canvas{
 
 	private genRandInt(min: number, max: number): number {
 		let randInt: number = Math.floor(Math.random() * (max - min + 1)) + min;
-
 		let positive = Math.round(Math.random())
 
 		if (positive) {
 			return randInt;
 		}
-
 		return -randInt;
+	}
+
+	private testObject(): void {
+		Object.keys(this.textEntities).forEach((key) => {
+			let entity = this.textEntities[key];
+
+			if (entity.expired && !entity.hasExpired) {
+				entity.hasExpired = true;
+				this.removeEntity(entity, 5000);
+			}
+
+			entity.drawText(entity.expired);
+
+			Object.keys(this.textEntities).forEach((comparisonKey) => {
+				let comparison = this.textEntities[comparisonKey];
+
+				if (entity.ID != comparison.ID && entity.intersects(comparison)) {
+					this.handleCollision(entity, comparison);
+				}
+			})
+		});
 	}
 
 	private main(): void {
 		this.ctx.clearRect(0, 0, this.width, this.height);
+		this.testObject();
 
-		// for (let i = this.textEntities.length-1; i >= 0; i--) {
-
-		// 	if (this.textEntities[i].expired && !this.textEntities[i].hasExpired) {
-		// 		this.textEntities[i].hasExpired = true;
-		// 		this.removeEntity(this.textEntities[i], 5000);
-		// 	}
-
-		// 	this.textEntities[i].drawText(this.textEntities[i].expired);
-
-		// 	for(let j = this.textEntities.length-1; j >= 0; j--) {
-		// 		if (i != j && this.textEntities[i].intersects(this.textEntities[j])) {
-		// 			this.handleCollision(this.textEntities[i], this.textEntities[j]);
-		// 			break;
-		// 		}
-		// 	}
-		// }
-
-		for (const entity of this.textEntities) {
-
-		}
 		window.requestAnimationFrame(this.main.bind(this));
 	}
 
-	private handleCollision(subject, collider) {
+	private handleCollision(subject, collider): void {
 
 		let entities: Set<any> = new Set();
 
@@ -61,7 +60,7 @@ export class Main extends Canvas{
 
 		if(entities.has('male') && entities.has('female')) {
 			this.handlePersonCollision(subject, collider);
-			return
+			return;
 		}
 
 		if (entities.has('virus') && entities.size > 1 && !entities.has('dead')) {
@@ -89,7 +88,7 @@ export class Main extends Canvas{
 			child.x = subject.x + this.genRandInt(50, 100);
 			child.y = collider.y + this.genRandInt(50, 100);
 
-			this.textEntities.push(child);
+			this.textEntities[child.ID] = child;
 		}
 	}
 
@@ -116,16 +115,13 @@ export class Main extends Canvas{
 	private async removeEntity(entity: TextEntity, time: number=0): Promise<void> {
 		await this.pause(time);
 
-		let index: number = this.textEntities.indexOf(entity);
-
-		this.textEntities.splice(index, 1);
+		delete this.textEntities[entity.ID];
 	}
 
 	public outbreak(): void {
-		setTimeout(() => {
-			for (let i = 0; i < 5; i++) { //this.genRandNum(10, 15)
-				this.textEntities.push(new Virus());
-			}
-		}, 10000);
+		for (let i = 0; i < this.genRandNum(10, 15); i++) {
+			let virus: TextEntity = new TextEntity('virus');
+			this.textEntities[virus.ID] = virus;
+		}
 	}
 }
