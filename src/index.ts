@@ -4,7 +4,7 @@ import {Person} from './person.js';
 let people: object = {};
 
 const loop = (canvas: Main): void => {
-    let randNum: number = canvas.genRandNum(10000, 11000);
+    let randNum: number = canvas.genRandNum(50000, 70000);
 
     setTimeout(() => {
         canvas.outbreak();
@@ -13,7 +13,7 @@ const loop = (canvas: Main): void => {
 }
 
 const start = (): void => {
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 13; i++) {
         let person: Person = new Person(20);
         people[person.ID] = person;
     }

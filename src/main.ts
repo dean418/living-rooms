@@ -119,7 +119,7 @@ export class Main extends Canvas{
 	}
 
 	public outbreak(): void {
-		for (let i = 0; i < this.genRandNum(10, 15); i++) {
+		for (let i = 0; i < this.genRandNum(15, 20); i++) {
 			let virus: TextEntity = new TextEntity('virus');
 			this.textEntities[virus.ID] = virus;
 		}

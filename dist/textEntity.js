@@ -59,7 +59,7 @@ export class TextEntity extends Canvas {
         return -speed;
     }
     styleText() {
-        this.ctx.font = '18pt arial';
+        this.ctx.font = '16pt arial';
         this.ctx.fillStyle = 'white';
         if (this.text == 'virus') {
             this.ctx.fillStyle = 'green';
