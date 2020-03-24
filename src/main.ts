@@ -4,7 +4,7 @@ import { TextEntity } from './textEntity.js';
 import { Virus } from './virus.js';
 
 export class Main extends Canvas{
-	constructor(entities: TextEntity[]) {
+	constructor(entities: any) {
 		super(entities);
 	}
 
@@ -29,22 +29,26 @@ export class Main extends Canvas{
 	private main(): void {
 		this.ctx.clearRect(0, 0, this.width, this.height);
 
-		for (let i = this.textEntities.length-1; i >= 0; i--) {
-			
-			if (this.textEntities[i].expired && !this.textEntities[i].hasExpired) {	
-				this.textEntities[i].hasExpired = true;			
-				this.removeEntity(this.textEntities[i], 5000);
-			}
+		// for (let i = this.textEntities.length-1; i >= 0; i--) {
 
-			this.textEntities[i].drawText(this.textEntities[i].expired);
+		// 	if (this.textEntities[i].expired && !this.textEntities[i].hasExpired) {
+		// 		this.textEntities[i].hasExpired = true;
+		// 		this.removeEntity(this.textEntities[i], 5000);
+		// 	}
 
-			for(let j = this.textEntities.length-1; j >= 0; j--) {
-				if (i != j && this.textEntities[i].intersects(this.textEntities[j])) {
-					this.handleCollision(this.textEntities[i], this.textEntities[j]);
-					break;
-				}
-			}
-		}
+		// 	this.textEntities[i].drawText(this.textEntities[i].expired);
+
+		// 	for(let j = this.textEntities.length-1; j >= 0; j--) {
+		// 		if (i != j && this.textEntities[i].intersects(this.textEntities[j])) {
+		// 			this.handleCollision(this.textEntities[i], this.textEntities[j]);
+		// 			break;
+		// 		}
+		// 	}
+		// }
+
+		this.textEntities.forEach(element => {
+
+		});
 		window.requestAnimationFrame(this.main.bind(this));
 	}
 
@@ -101,7 +105,7 @@ export class Main extends Canvas{
 		}
 	}
 
-	private pause(time: number): Promise<void> {		
+	private pause(time: number): Promise<void> {
 		return new Promise((resolve) => {
 			setTimeout(() => {
 				resolve();
@@ -113,7 +117,7 @@ export class Main extends Canvas{
 		await this.pause(time);
 
 		let index: number = this.textEntities.indexOf(entity);
-				
+
 		this.textEntities.splice(index, 1);
 	}
 

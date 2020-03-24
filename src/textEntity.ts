@@ -1,23 +1,24 @@
 import {Canvas} from './canvas.js';
 
 export abstract class TextEntity extends Canvas {
-	protected text: string;
-	private textWidth: number;
+	public ID: string;
 	public x: number;
 	public y: number;
 	private dx: number;
 	private dy: number;
+	private textWidth: number;
+	protected text: string;
 
 	constructor(text: string) {
 		super();
+		this.ID = this.genID();
 		this.text = text;
-
 		this.styleText();
-
 		this.x = this.genCoord(this.width - this.textWidth);
 		this.y = this.genCoord(this.height - parseInt(this.ctx.font));
 		this.dx = this.genDirection();
 		this.dy = this.genDirection();
+
 	}
 
 	public get top(): number {
@@ -65,6 +66,10 @@ export abstract class TextEntity extends Canvas {
 		}
 
 		return true;
+	}
+
+	private genID(): string {
+		return '_' + Math.random().toString(36).substr(2, 9);
 	}
 
 	private genCoord(max: number): number {

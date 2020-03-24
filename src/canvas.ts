@@ -3,9 +3,9 @@ export class Canvas {
 	protected ctx: CanvasRenderingContext2D;
 	protected width: number;
 	protected height: number;
-	protected textEntities: any[];
+	protected textEntities: any;
 
-	constructor(textEntity?: any[]) {
+	constructor(textEntity?: any) {
 		this.canvas = document.getElementById('canvas') as HTMLCanvasElement;
 		this.ctx = this.canvas.getContext('2d');
 		this.width = window.innerWidth;
