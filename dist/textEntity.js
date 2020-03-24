@@ -55,7 +55,7 @@ export class TextEntity extends Canvas {
         return -speed;
     }
     styleText() {
-        this.ctx.font = '28pt arial';
+        this.ctx.font = '18pt arial';
         this.ctx.fillStyle = 'white';
         this.textWidth = this.ctx.measureText(this.text).width;
     }
