@@ -3,7 +3,7 @@ export class Person extends TextEntity {
     constructor(age = 0) {
         super(undefined);
         this.age = age;
-        this.maxAge = this.genRandAge(50, 100);
+        this.maxAge = this.genRandNum(50, 100);
         this.expired = false;
         this.hasExpired = false;
         this.oddEven = Math.round(Math.random());
@@ -38,10 +38,6 @@ export class Person extends TextEntity {
             this.age++;
             this.checkAge();
         }, 1000);
-    }
-    genRandAge(min, max) {
-        let randInt = Math.floor(Math.random() * (max - min + 1)) + min;
-        return randInt;
     }
     expire() {
         this.expired = true;

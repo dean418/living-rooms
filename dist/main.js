@@ -1,5 +1,6 @@
 import { Canvas } from './canvas.js';
 import { Person } from './person.js';
+import { Virus } from './virus.js';
 export class Main extends Canvas {
     constructor(entities) {
         super(entities);
@@ -75,10 +76,23 @@ export class Main extends Canvas {
             this.removeEntity(entity, 5000);
         }
     }
-    removeEntity(entity, time = 0) {
+    pause(time) {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve();
+            }, time);
+        });
+    }
+    async removeEntity(entity, time = 0) {
+        await this.pause(time);
+        let index = this.textEntities.indexOf(entity);
+        this.textEntities.splice(index, 1);
+    }
+    outbreak() {
         setTimeout(() => {
-            let index = this.textEntities.indexOf(entity);
-            this.textEntities.splice(index, 1);
-        }, time);
+            for (let i = 0; i < 5; i++) {
+                this.textEntities.push(new Virus());
+            }
+        }, 10000);
     }
 }

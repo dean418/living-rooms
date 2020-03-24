@@ -6,4 +6,8 @@ export class Canvas {
         this.height = window.innerHeight;
         this.textEntities = textEntity;
     }
+    genRandNum(min, max) {
+        let randInt = Math.floor(Math.random() * (max - min + 1)) + min;
+        return randInt;
+    }
 }

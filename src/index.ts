@@ -1,12 +1,26 @@
 import {Main} from './main.js';
 import {Person} from './person.js';
-import {Virus} from './virus.js';
 
 let people: Person[] = [];
 
-for (let i = 0; i < 6; i++) {
-    people.push(new Person(20));
+const loop = (canvas) => {
+    let randNum = canvas.genRandNum(40000, 50000);
+
+    setTimeout(() => {
+        canvas.outbreak();
+        loop(canvas);
+    }, randNum);
 }
 
-let canvas = new Main(people);
-canvas.init();
+const start = () => {
+    for (let i = 0; i < 7; i++) {
+        people.push(new Person(20));
+    }
+    
+    let canvas = new Main(people);
+    canvas.init();
+
+    loop(canvas);
+}
+
+start();

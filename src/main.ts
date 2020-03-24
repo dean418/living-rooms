@@ -1,6 +1,7 @@
 import {Canvas} from './canvas.js';
 import {Person} from './person.js';
 import { TextEntity } from './textEntity.js';
+import { Virus } from './virus.js';
 
 export class Main extends Canvas{
 	constructor(entities: TextEntity[]) {
@@ -100,10 +101,27 @@ export class Main extends Canvas{
 		}
 	}
 
-	private removeEntity(entity: TextEntity, time: number=0): void {
+	private pause(time: number): Promise<void> {		
+		return new Promise((resolve) => {
+			setTimeout(() => {
+				resolve();
+			}, time);
+		});
+	}
+
+	private async removeEntity(entity: TextEntity, time: number=0): Promise<void> {
+		await this.pause(time);
+
+		let index: number = this.textEntities.indexOf(entity);
+				
+		this.textEntities.splice(index, 1);
+	}
+
+	public outbreak(): void {
 		setTimeout(() => {
-			let index = this.textEntities.indexOf(entity);			
-			this.textEntities.splice(index, 1);
-		}, time)
+			for (let i = 0; i < 5; i++) { //this.genRandNum(10, 15)
+				this.textEntities.push(new Virus());
+			}
+		}, 10000);
 	}
 }
