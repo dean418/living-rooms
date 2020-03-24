@@ -46,9 +46,9 @@ export class Main extends Canvas{
 		// 	}
 		// }
 
-		this.textEntities.forEach(element => {
+		for (const entity of this.textEntities) {
 
-		});
+		}
 		window.requestAnimationFrame(this.main.bind(this));
 	}
 
