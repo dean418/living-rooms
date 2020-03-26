@@ -1,9 +1,9 @@
 export class Canvas {
-	protected canvas: HTMLCanvasElement;
-	protected ctx: CanvasRenderingContext2D;
-	protected width: number;
-	protected height: number;
-	protected textEntities: object;
+	public canvas: HTMLCanvasElement;
+	public ctx: CanvasRenderingContext2D;
+	public width: number;
+	public height: number;
+	public textEntities: object;
 
 	constructor(textEntity?: object) {
 		this.canvas = document.getElementById('canvas') as HTMLCanvasElement;
@@ -11,10 +11,13 @@ export class Canvas {
 		this.width = window.innerWidth;
 		this.height = window.innerHeight;
 		this.textEntities = textEntity;
+
+		this.setup();
 	}
 
-	public genRandNum(min: number, max: number): number {
-		let randInt: number = Math.floor(Math.random() * (max - min + 1)) + min;
-		return randInt;
+	private setup() {
+		this.canvas.width = window.innerWidth;
+		this.canvas.height = window.innerHeight;
+
 	}
 }

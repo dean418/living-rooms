@@ -1,21 +1,22 @@
 import {Canvas} from './canvas.js';
 
-export class TextEntity extends Canvas{
+export class TextEntity {
 	public ID: string;
 	public x: number;
 	public y: number;
-	protected dx: number;
-	protected dy: number;
+	private canvas: Canvas;
 	private textWidth: number;
 	protected text: string;
+	protected dx: number;
+	protected dy: number;
 
 	constructor(text: string) {
-		super();
 		this.ID = this.genID();
+		this.canvas = new Canvas();
 		this.text = text;
 		this.styleText();
-		this.x = this.genCoord(this.width - this.textWidth);
-		this.y = this.genCoord(this.height - parseInt(this.ctx.font));
+		this.x = this.genCoord(this.canvas.width - this.textWidth);
+		this.y = this.genCoord(this.canvas.height - parseInt(this.canvas.ctx.font));
 		this.dx = this.genDirection();
 		this.dy = this.genDirection();
 	}
@@ -25,7 +26,7 @@ export class TextEntity extends Canvas{
 	}
 
 	public get bottom(): number {
-		return this.y + parseInt(this.ctx.font);
+		return this.y + parseInt(this.canvas.ctx.font);
 	}
 
 	public get left(): number {
@@ -43,7 +44,7 @@ export class TextEntity extends Canvas{
 			this.checkBounds();
 		}
 
-		this.ctx.fillText(this.text, this.x, this.y);
+		this.canvas.ctx.fillText(this.text, this.x, this.y);
 	}
 
 	public intersects(entity: TextEntity): boolean {
@@ -87,18 +88,18 @@ export class TextEntity extends Canvas{
 	}
 
 	private styleText(): void {
-		this.ctx.font = '16pt arial';
-		this.ctx.fillStyle = 'white';
+		this.canvas.ctx.font = '16pt arial';
+		this.canvas.ctx.fillStyle = 'white';
 		if (this.text == 'virus') {
-			this.ctx.fillStyle = 'green';
+			this.canvas.ctx.fillStyle = 'green';
 		} else if(this.text == 'food') {
-			this.ctx.fillStyle = 'red';
+			this.canvas.ctx.fillStyle = 'red';
 		}
-		this.textWidth = this.ctx.measureText(this.text).width;
+		this.textWidth = this.canvas.ctx.measureText(this.text).width;
 	}
 
 	protected checkBounds(): void {
-		if(this.y + this.dy > this.canvas.height || this.y + this.dy < parseInt(this.ctx.font)) {
+		if(this.y + this.dy > this.canvas.height || this.y + this.dy < parseInt(this.canvas.ctx.font)) {
 			this.dy = -this.dy;
 		}
 

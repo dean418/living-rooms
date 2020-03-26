@@ -1,12 +1,12 @@
 import { Canvas } from './canvas.js';
-export class TextEntity extends Canvas {
+export class TextEntity {
     constructor(text) {
-        super();
         this.ID = this.genID();
+        this.canvas = new Canvas();
         this.text = text;
         this.styleText();
-        this.x = this.genCoord(this.width - this.textWidth);
-        this.y = this.genCoord(this.height - parseInt(this.ctx.font));
+        this.x = this.genCoord(this.canvas.width - this.textWidth);
+        this.y = this.genCoord(this.canvas.height - parseInt(this.canvas.ctx.font));
         this.dx = this.genDirection();
         this.dy = this.genDirection();
     }
@@ -14,7 +14,7 @@ export class TextEntity extends Canvas {
         return this.y;
     }
     get bottom() {
-        return this.y + parseInt(this.ctx.font);
+        return this.y + parseInt(this.canvas.ctx.font);
     }
     get left() {
         return this.x;
@@ -27,7 +27,7 @@ export class TextEntity extends Canvas {
         if (!expired) {
             this.checkBounds();
         }
-        this.ctx.fillText(this.text, this.x, this.y);
+        this.canvas.ctx.fillText(this.text, this.x, this.y);
     }
     intersects(entity) {
         if (this.top > entity.bottom) {
@@ -59,18 +59,18 @@ export class TextEntity extends Canvas {
         return -speed;
     }
     styleText() {
-        this.ctx.font = '16pt arial';
-        this.ctx.fillStyle = 'white';
+        this.canvas.ctx.font = '16pt arial';
+        this.canvas.ctx.fillStyle = 'white';
         if (this.text == 'virus') {
-            this.ctx.fillStyle = 'green';
+            this.canvas.ctx.fillStyle = 'green';
         }
         else if (this.text == 'food') {
-            this.ctx.fillStyle = 'red';
+            this.canvas.ctx.fillStyle = 'red';
         }
-        this.textWidth = this.ctx.measureText(this.text).width;
+        this.textWidth = this.canvas.ctx.measureText(this.text).width;
     }
     checkBounds() {
-        if (this.y + this.dy > this.canvas.height || this.y + this.dy < parseInt(this.ctx.font)) {
+        if (this.y + this.dy > this.canvas.height || this.y + this.dy < parseInt(this.canvas.ctx.font)) {
             this.dy = -this.dy;
         }
         if (this.x + this.dx > this.canvas.width - this.textWidth || this.x + this.dx < 0) {

@@ -13,7 +13,7 @@ export class Person extends TextEntity {
 		super(undefined);
 
 		this.age = age;
-		this.maxAge = this.genRandNum(50, 100);
+		// this.maxAge = this.genRandNum(50, 100);
 		this.expired = false;
 		this.hasExpired = false;
 		this.oddEven = Math.round(Math.random());
@@ -63,13 +63,11 @@ export class Person extends TextEntity {
 	}
 
 	public increaseSpeed(amount: number): void {
-		console.log('called');
-		
 		let arr = ['dx', 'dy'];
 		for (const xy of arr) {
 			if (Math.sign(this[xy]) == 1) {
 				this[xy] += amount;
-			} else {				
+			} else {
 				this[xy] -= amount;
 			}
 		}

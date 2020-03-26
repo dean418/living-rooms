@@ -1,21 +1,33 @@
+import {TextEntity} from './textEntity.js';
+import {RandNum} from './lib/randNum.js';
 import {Canvas} from './canvas.js';
 import {Person} from './person.js';
-import {TextEntity} from './textEntity.js';
 import {Food} from './food.js';
 
-export class Main extends Canvas{
-	constructor(entities: object) {
-		super(entities);
+export class Main {
+	protected canvas: Canvas;
+	public textEntities: object;
+
+	constructor(entities?: object) {
+		this.canvas = new Canvas();
+		this.textEntities = entities;
 	}
 
 	public init(): void {
-		this.canvas.width = window.innerWidth;
-		this.canvas.height = window.innerHeight;
+		this.outbreak();
+		this.spawnFood();
+		window.requestAnimationFrame(this.main.bind(this));
+	}
+
+	private main(): void {
+		this.canvas.ctx.clearRect(0, 0, this.canvas.canvas.width, this.canvas.canvas.height);
+		this.testObject();
+
 		window.requestAnimationFrame(this.main.bind(this));
 	}
 
 	private genRandInt(min: number, max: number): number {
-		let randInt: number = Math.floor(Math.random() * (max - min + 1)) + min;
+		let randInt: number = new RandNum(min, max).num
 		let positive = Math.round(Math.random())
 
 		if (positive) {
@@ -38,13 +50,6 @@ export class Main extends Canvas{
 				}
 			}
 		}
-	}
-
-	private main(): void {
-		this.ctx.clearRect(0, 0, this.width, this.height);
-		this.testObject();
-
-		window.requestAnimationFrame(this.main.bind(this));
 	}
 
 	private handleCollision(subject, collider): void {
@@ -110,7 +115,7 @@ export class Main extends Canvas{
 
 			if (entity.speedBoost == 0) {
 				entity.increaseSpeed(3);
-			} 
+			}
 		}
 	}
 
@@ -124,29 +129,33 @@ export class Main extends Canvas{
 
 	private async removeEntity(entity: TextEntity, time: number=0): Promise<void> {
 		await this.pause(time);
-
 		delete this.textEntities[entity.ID];
 	}
 
 	public outbreak(): void {
-		for (let i = 0; i < this.genRandNum(15, 20); i++) {
-			let virus: TextEntity = new TextEntity('virus');
-			this.textEntities[virus.ID] = virus;
-		}
+		let randNum: number = new RandNum(50000, 70000).num;
+
+		setTimeout(() => {
+			let total: number = new RandNum(15, 20).num;
+
+			for (let i = 0; i < total; i++) {
+				let virus: TextEntity = new TextEntity('virus');
+				this.textEntities[virus.ID] = virus;
+			}
+
+			this.outbreak();
+		}, randNum);
 	}
 
-	private spawnFood(interval?: number): void {
-		let intervalTime = this.genRandNum(10000, 20000);
+	private spawnFood(): void {
+		let randNum: number = new RandNum(5000, 10000).num;
 
-		if (interval) {
-			clearInterval(interval);
-		}
-
-		interval = setInterval(() => {
+		setTimeout(() => {
 			let food = new Food();
 
 			this.textEntities[food.ID] = food;
-			this.spawnFood(interval);
-		}, intervalTime);
+
+			this.spawnFood();
+		}, randNum);
 	}
 }

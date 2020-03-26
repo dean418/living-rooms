@@ -5,18 +5,10 @@ export class Canvas {
         this.width = window.innerWidth;
         this.height = window.innerHeight;
         this.textEntities = textEntity;
+        this.setup();
     }
-    genRandNum(min, max) {
-        let randInt = Math.floor(Math.random() * (max - min + 1)) + min;
-        return randInt;
-    }
-    spawnFood(interval) {
-        let intervalTime = this.genRandNum(10000, 20000);
-        if (interval) {
-            clearInterval(interval);
-        }
-        interval = setInterval(() => {
-            this.spawnFood(interval);
-        }, intervalTime);
+    setup() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
     }
 }
