@@ -42,20 +42,13 @@ export class Person extends TextEntity {
         setInterval(() => {
             this.age++;
             this.checkAge();
-            console.log(this.speedBoost);
-            if (this.speedBoost) {
-                this.speedBoost--;
-            }
-            else if (!this.speedBoost && this.dx > 3) {
-                console.log('it is');
-                this.increaseSpeed(-3);
-            }
         }, 1000);
     }
     increaseSpeed(amount) {
+        console.log('called');
         let arr = ['dx', 'dy'];
         for (const xy of arr) {
-            if (Math.sign(this[xy])) {
+            if (Math.sign(this[xy]) == 1) {
                 this[xy] += amount;
             }
             else {

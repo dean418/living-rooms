@@ -1,6 +1,6 @@
 import {Canvas} from './canvas.js';
 
-export class TextEntity extends Canvas {
+export class TextEntity extends Canvas{
 	public ID: string;
 	public x: number;
 	public y: number;

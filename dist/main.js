@@ -19,20 +19,18 @@ export class Main extends Canvas {
         return -randInt;
     }
     testObject() {
-        Object.keys(this.textEntities).forEach((key) => {
-            let entity = this.textEntities[key];
+        for (let [key, entity] of Object.entries(this.textEntities)) {
             if (entity.expired && !entity.hasExpired) {
                 entity.hasExpired = true;
                 this.removeEntity(entity, 5000);
             }
             entity.drawText(entity.expired);
-            Object.keys(this.textEntities).forEach((comparisonKey) => {
-                let comparison = this.textEntities[comparisonKey];
+            for (let [key, comparison] of Object.entries(this.textEntities)) {
                 if (entity.ID != comparison.ID && entity.intersects(comparison)) {
                     this.handleCollision(entity, comparison);
                 }
-            });
-        });
+            }
+        }
     }
     main() {
         this.ctx.clearRect(0, 0, this.width, this.height);
@@ -88,7 +86,9 @@ export class Main extends Canvas {
                 this.removeEntity(entity);
                 continue;
             }
-            entity.increaseSpeed(3);
+            if (entity.speedBoost == 0) {
+                entity.increaseSpeed(3);
+            }
         }
     }
     pause(time) {

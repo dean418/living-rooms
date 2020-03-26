@@ -1,11 +1,10 @@
 import {Main} from './main.js';
 import {Person} from './person.js';
-import { Food } from './food.js';
 
 let people: object = {};
 
 const loop = (canvas: Main): void => {
-    let randNum: number = canvas.genRandNum(50000, 70000);
+    let randNum: number = canvas.genRandNum(10000, 11000);
 
     setTimeout(() => {
         canvas.outbreak();
@@ -18,9 +17,6 @@ const start = (): void => {
         let person: Person = new Person(20);
         people[person.ID] = person;
     }
-
-    let food = new Food();
-    people[food.ID] = food;
 
     let canvas: Main = new Main(people);
     canvas.init();

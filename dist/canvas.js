@@ -10,4 +10,13 @@ export class Canvas {
         let randInt = Math.floor(Math.random() * (max - min + 1)) + min;
         return randInt;
     }
+    spawnFood(interval) {
+        let intervalTime = this.genRandNum(10000, 20000);
+        if (interval) {
+            clearInterval(interval);
+        }
+        interval = setInterval(() => {
+            this.spawnFood(interval);
+        }, intervalTime);
+    }
 }
