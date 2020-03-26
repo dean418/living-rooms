@@ -64,6 +64,9 @@ export class TextEntity extends Canvas {
         if (this.text == 'virus') {
             this.ctx.fillStyle = 'green';
         }
+        else if (this.text == 'food') {
+            this.ctx.fillStyle = 'red';
+        }
         this.textWidth = this.ctx.measureText(this.text).width;
     }
     checkBounds() {

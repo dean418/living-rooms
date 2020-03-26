@@ -68,8 +68,9 @@ export class Main extends Canvas{
 			return;
 		}
 
-		if (entities.has('male') || entities.has('female') && entities.has('food')) {
-			// speed boost
+		if (entities.has('food') && !entities.has('dead') && !entities.has('child')) {
+			this.handleFoodCollision(subject, collider);
+			return;
 		}
 	}
 
@@ -101,6 +102,16 @@ export class Main extends Canvas{
 
 			entity.expire();
 			this.removeEntity(entity, 5000);
+		}
+	}
+
+	private handleFoodCollision(subject, collider): void {
+		for (const entity of arguments) {
+			if (entity.text == 'food') {
+				this.removeEntity(entity);
+				continue;
+			}
+			entity.increaseSpeed(3);
 		}
 	}
 

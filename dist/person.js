@@ -7,14 +7,19 @@ export class Person extends TextEntity {
         this.expired = false;
         this.hasExpired = false;
         this.oddEven = Math.round(Math.random());
+        this.speedBoost = 0;
         if (this.oddEven) {
             this.gender = 'male';
         }
         else {
             this.gender = 'female';
         }
-        this.updateAge();
+        this.updatePerson();
         this.checkAge();
+    }
+    expire() {
+        this.expired = true;
+        this.text = 'dead';
     }
     checkAge() {
         if (this.expired) {
@@ -33,14 +38,30 @@ export class Person extends TextEntity {
         }
         this.text = this.gender;
     }
-    updateAge() {
+    updatePerson() {
         setInterval(() => {
             this.age++;
             this.checkAge();
+            console.log(this.speedBoost);
+            if (this.speedBoost) {
+                this.speedBoost--;
+            }
+            else if (!this.speedBoost && this.dx > 3) {
+                console.log('it is');
+                this.increaseSpeed(-3);
+            }
         }, 1000);
     }
-    expire() {
-        this.expired = true;
-        this.text = 'dead';
+    increaseSpeed(amount) {
+        let arr = ['dx', 'dy'];
+        for (const xy of arr) {
+            if (Math.sign(this[xy])) {
+                this[xy] += amount;
+            }
+            else {
+                this[xy] -= amount;
+            }
+        }
+        this.speedBoost += 3;
     }
 }

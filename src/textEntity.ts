@@ -4,8 +4,8 @@ export class TextEntity extends Canvas {
 	public ID: string;
 	public x: number;
 	public y: number;
-	private dx: number;
-	private dy: number;
+	protected dx: number;
+	protected dy: number;
 	private textWidth: number;
 	protected text: string;
 
@@ -91,11 +91,13 @@ export class TextEntity extends Canvas {
 		this.ctx.fillStyle = 'white';
 		if (this.text == 'virus') {
 			this.ctx.fillStyle = 'green';
+		} else if(this.text == 'food') {
+			this.ctx.fillStyle = 'red';
 		}
 		this.textWidth = this.ctx.measureText(this.text).width;
 	}
 
-	private checkBounds(): void {
+	protected checkBounds(): void {
 		if(this.y + this.dy > this.canvas.height || this.y + this.dy < parseInt(this.ctx.font)) {
 			this.dy = -this.dy;
 		}

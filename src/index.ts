@@ -1,5 +1,6 @@
 import {Main} from './main.js';
 import {Person} from './person.js';
+import { Food } from './food.js';
 
 let people: object = {};
 
@@ -13,10 +14,13 @@ const loop = (canvas: Main): void => {
 }
 
 const start = (): void => {
-    for (let i = 0; i < 13; i++) {
+    for (let i = 0; i < 5; i++) {
         let person: Person = new Person(20);
         people[person.ID] = person;
     }
+
+    let food = new Food();
+    people[food.ID] = food;
 
     let canvas: Main = new Main(people);
     canvas.init();

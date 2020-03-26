@@ -7,6 +7,7 @@ export class Person extends TextEntity {
 	private maxAge: number;
 	private gender: string;
 	private oddEven: number;
+	private speedBoost: number;
 
 	constructor(age: number=0) {
 		super(undefined);
@@ -16,6 +17,7 @@ export class Person extends TextEntity {
 		this.expired = false;
 		this.hasExpired = false;
 		this.oddEven = Math.round(Math.random());
+		this.speedBoost = 0;
 
 		if(this.oddEven) {
 			this.gender = 'male';
@@ -23,8 +25,13 @@ export class Person extends TextEntity {
 			this.gender = 'female';
 		}
 
-		this.updateAge();
+		this.updatePerson();
 		this.checkAge();
+	}
+
+	public expire(): void {
+		this.expired = true;
+		this.text = 'dead';
 	}
 
 	private checkAge():void {
@@ -48,15 +55,33 @@ export class Person extends TextEntity {
 		this.text = this.gender;
 	}
 
-	private updateAge(): void {
+	private updatePerson(): void {
 		setInterval(() => {
 			this.age++;
 			this.checkAge();
+			console.log(this.speedBoost);
+
+			if (this.speedBoost) {
+				this.speedBoost--;
+			} else if(!this.speedBoost && this.dx > 3) {
+				console.log('it is');
+
+				this.increaseSpeed(-3);
+			}
+
 		}, 1000);
 	}
 
-	public expire(): void {
-		this.expired = true;
-		this.text = 'dead';
+	public increaseSpeed(amount: number): void {
+		let arr = ['dx', 'dy'];
+		for (const xy of arr) {
+			if (Math.sign(this[xy])) {
+				this[xy] += amount;
+			} else {
+				this[xy] -= amount;
+			}
+		}
+
+		this.speedBoost += 3;
 	}
 }

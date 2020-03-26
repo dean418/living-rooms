@@ -51,7 +51,9 @@ export class Main extends Canvas {
             this.handleVirusCollision(subject, collider);
             return;
         }
-        if (entities.has('male') || entities.has('female') && entities.has('food')) {
+        if (entities.has('food') && !entities.has('dead') && !entities.has('child')) {
+            this.handleFoodCollision(subject, collider);
+            return;
         }
     }
     handlePersonCollision(subject, collider) {
@@ -78,6 +80,15 @@ export class Main extends Canvas {
             }
             entity.expire();
             this.removeEntity(entity, 5000);
+        }
+    }
+    handleFoodCollision(subject, collider) {
+        for (const entity of arguments) {
+            if (entity.text == 'food') {
+                this.removeEntity(entity);
+                continue;
+            }
+            entity.increaseSpeed(3);
         }
     }
     pause(time) {
