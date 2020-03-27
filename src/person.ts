@@ -1,4 +1,5 @@
 import {TextEntity} from './textEntity.js';
+import {RandNum} from './lib/randNum.js';
 
 export class Person extends TextEntity {
 	public expired: boolean;
@@ -13,7 +14,7 @@ export class Person extends TextEntity {
 		super(undefined);
 
 		this.age = age;
-		// this.maxAge = this.genRandNum(50, 100);
+		this.maxAge = new RandNum(60, 100).num;
 		this.expired = false;
 		this.hasExpired = false;
 		this.oddEven = Math.round(Math.random());
@@ -32,6 +33,22 @@ export class Person extends TextEntity {
 	public expire(): void {
 		this.expired = true;
 		this.text = 'dead';
+	}
+
+	public increaseSpeed(amount: number): void {
+		let arr = ['dx', 'dy'];
+		for (const xy of arr) {
+			if (Math.sign(this[xy]) == 1) {
+				this[xy] += amount;
+			} else {
+				this[xy] -= amount;
+			}
+		}
+		this.speedBoost += 3;
+	}
+
+	public increaseLife(): void {
+		this.maxAge += 10;
 	}
 
 	private checkAge():void {
@@ -59,19 +76,12 @@ export class Person extends TextEntity {
 		setInterval(() => {
 			this.age++;
 			this.checkAge();
-		}, 1000);
-	}
 
-	public increaseSpeed(amount: number): void {
-		let arr = ['dx', 'dy'];
-		for (const xy of arr) {
-			if (Math.sign(this[xy]) == 1) {
-				this[xy] += amount;
-			} else {
-				this[xy] -= amount;
+			if (this.speedBoost) {
+				this.speedBoost--;
+			} else if (this.dx < -3 || this.dx > 3) {
+				this.increaseSpeed(-2)	
 			}
-		}
-
-		this.speedBoost += 3;
+		}, 1000);
 	}
 }

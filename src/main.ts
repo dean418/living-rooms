@@ -8,15 +8,16 @@ export class Main {
 	protected canvas: Canvas;
 	public textEntities: object;
 
-	constructor(entities?: object) {
+	constructor() {
 		this.canvas = new Canvas();
-		this.textEntities = entities;
+		this.textEntities = {}
+		this.reset();
 	}
 
 	public init(): void {
 		this.outbreak();
 		this.spawnFood();
-		window.requestAnimationFrame(this.main.bind(this));
+		this.main();
 	}
 
 	private main(): void {
@@ -24,6 +25,14 @@ export class Main {
 		this.testObject();
 
 		window.requestAnimationFrame(this.main.bind(this));
+	}
+
+	public reset(): void {
+		this.textEntities = {};
+		for (let i = 0; i < 5; i++) {
+			let person: Person = new Person(20);
+			this.textEntities[person.ID] = person;
+		}
 	}
 
 	private genRandInt(min: number, max: number): number {
@@ -113,8 +122,10 @@ export class Main {
 				continue;
 			}
 
+			entity.increaseLife();
+
 			if (entity.speedBoost == 0) {
-				entity.increaseSpeed(3);
+				entity.increaseSpeed(2);
 			}
 		}
 	}
@@ -154,7 +165,6 @@ export class Main {
 			let food = new Food();
 
 			this.textEntities[food.ID] = food;
-
 			this.spawnFood();
 		}, randNum);
 	}

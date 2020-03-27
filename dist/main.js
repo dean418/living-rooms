@@ -4,19 +4,27 @@ import { Canvas } from './canvas.js';
 import { Person } from './person.js';
 import { Food } from './food.js';
 export class Main {
-    constructor(entities) {
+    constructor() {
         this.canvas = new Canvas();
-        this.textEntities = entities;
+        this.textEntities = {};
+        this.reset();
     }
     init() {
         this.outbreak();
         this.spawnFood();
-        window.requestAnimationFrame(this.main.bind(this));
+        this.main();
     }
     main() {
         this.canvas.ctx.clearRect(0, 0, this.canvas.canvas.width, this.canvas.canvas.height);
         this.testObject();
         window.requestAnimationFrame(this.main.bind(this));
+    }
+    reset() {
+        this.textEntities = {};
+        for (let i = 0; i < 5; i++) {
+            let person = new Person(20);
+            this.textEntities[person.ID] = person;
+        }
     }
     genRandInt(min, max) {
         let randInt = new RandNum(min, max).num;
@@ -89,8 +97,9 @@ export class Main {
                 this.removeEntity(entity);
                 continue;
             }
+            entity.increaseLife();
             if (entity.speedBoost == 0) {
-                entity.increaseSpeed(3);
+                entity.increaseSpeed(2);
             }
         }
     }

@@ -15,9 +15,8 @@ export class Canvas {
 		this.setup();
 	}
 
-	private setup() {
+	private setup(): void {
 		this.canvas.width = window.innerWidth;
 		this.canvas.height = window.innerHeight;
-
 	}
 }
