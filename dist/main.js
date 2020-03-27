@@ -7,24 +7,44 @@ export class Main {
     constructor() {
         this.canvas = new Canvas();
         this.textEntities = {};
-        this.reset();
+        this.createEntities();
+        this.resetBtn = document.getElementById('reset');
+        this.stopBtn = document.getElementById('stop');
+        this.startBtn = document.getElementById('start');
+        this.resetBtn.addEventListener('click', () => this.reset());
+        this.stopBtn.addEventListener('click', (() => this.stop()));
+        this.startBtn.addEventListener('click', (() => this.start()));
     }
     init() {
         this.outbreak();
         this.spawnFood();
         this.main();
     }
-    main() {
-        this.canvas.ctx.clearRect(0, 0, this.canvas.canvas.width, this.canvas.canvas.height);
-        this.testObject();
-        window.requestAnimationFrame(this.main.bind(this));
-    }
     reset() {
+        cancelAnimationFrame(this.animationFrameID);
         this.textEntities = {};
+        this.createEntities();
+        this.main();
+    }
+    stop() {
+        cancelAnimationFrame(this.animationFrameID);
+        this.animationFrameID = 0;
+    }
+    start() {
+        if (!this.animationFrameID) {
+            this.main();
+        }
+    }
+    createEntities() {
         for (let i = 0; i < 5; i++) {
             let person = new Person(20);
             this.textEntities[person.ID] = person;
         }
+    }
+    main() {
+        this.canvas.ctx.clearRect(0, 0, this.canvas.canvas.width, this.canvas.canvas.height);
+        this.testObject();
+        this.animationFrameID = window.requestAnimationFrame(this.main.bind(this));
     }
     genRandInt(min, max) {
         let randInt = new RandNum(min, max).num;
@@ -97,7 +117,6 @@ export class Main {
                 this.removeEntity(entity);
                 continue;
             }
-            entity.increaseLife();
             if (entity.speedBoost == 0) {
                 entity.increaseSpeed(2);
             }
@@ -128,8 +147,11 @@ export class Main {
     spawnFood() {
         let randNum = new RandNum(5000, 10000).num;
         setTimeout(() => {
-            let food = new Food();
-            this.textEntities[food.ID] = food;
+            let foodNum = new RandNum(1, 4).num;
+            for (let i = 0; i < foodNum; i++) {
+                let food = new Food();
+                this.textEntities[food.ID] = food;
+            }
             this.spawnFood();
         }, randNum);
     }

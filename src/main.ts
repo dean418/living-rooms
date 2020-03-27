@@ -5,13 +5,25 @@ import {Person} from './person.js';
 import {Food} from './food.js';
 
 export class Main {
-	protected canvas: Canvas;
+	private resetBtn: HTMLElement;
+	private stopBtn: HTMLElement;
+	private startBtn: HTMLElement;
+	private animationFrameID: number;
 	public textEntities: object;
+	protected canvas: Canvas;
 
 	constructor() {
 		this.canvas = new Canvas();
 		this.textEntities = {}
-		this.reset();
+		this.createEntities();
+
+		this.resetBtn = document.getElementById('reset');
+		this.stopBtn = document.getElementById('stop');
+		this.startBtn = document.getElementById('start');
+
+		this.resetBtn.addEventListener('click', () => this.reset());
+		this.stopBtn.addEventListener('click', (() => this.stop()));
+		this.startBtn.addEventListener('click', (() => this.start()));
 	}
 
 	public init(): void {
@@ -20,19 +32,38 @@ export class Main {
 		this.main();
 	}
 
-	private main(): void {
-		this.canvas.ctx.clearRect(0, 0, this.canvas.canvas.width, this.canvas.canvas.height);
-		this.testObject();
+	private reset(): void {
+		cancelAnimationFrame(this.animationFrameID);
 
-		window.requestAnimationFrame(this.main.bind(this));
+		this.textEntities = {};
+		this.createEntities();
+
+		this.main();
 	}
 
-	public reset(): void {
-		this.textEntities = {};
+	private stop(): void {
+		cancelAnimationFrame(this.animationFrameID);
+		this.animationFrameID = 0;
+	}
+
+	private start(): void {
+		if (!this.animationFrameID) {
+			this.main();
+		}
+	}
+
+	private createEntities(): void {
 		for (let i = 0; i < 5; i++) {
 			let person: Person = new Person(20);
 			this.textEntities[person.ID] = person;
 		}
+	}
+
+	private main(): void {
+		this.canvas.ctx.clearRect(0, 0, this.canvas.canvas.width, this.canvas.canvas.height);
+		this.testObject();
+
+		this.animationFrameID = window.requestAnimationFrame(this.main.bind(this));
 	}
 
 	private genRandInt(min: number, max: number): number {
@@ -62,7 +93,6 @@ export class Main {
 	}
 
 	private handleCollision(subject, collider): void {
-
 		let entities: Set<any> = new Set();
 
 		entities.add(subject.text);
@@ -122,8 +152,6 @@ export class Main {
 				continue;
 			}
 
-			entity.increaseLife();
-
 			if (entity.speedBoost == 0) {
 				entity.increaseSpeed(2);
 			}
@@ -162,9 +190,13 @@ export class Main {
 		let randNum: number = new RandNum(5000, 10000).num;
 
 		setTimeout(() => {
-			let food = new Food();
+			let foodNum: number = new RandNum(1, 4).num;
 
-			this.textEntities[food.ID] = food;
+			for (let i = 0; i < foodNum; i++) {
+				let food = new Food();
+				this.textEntities[food.ID] = food;
+			}
+
 			this.spawnFood();
 		}, randNum);
 	}

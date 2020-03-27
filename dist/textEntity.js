@@ -67,6 +67,9 @@ export class TextEntity {
         else if (this.text == 'food') {
             this.canvas.ctx.fillStyle = 'red';
         }
+        else if (this.text == 'dead') {
+            this.canvas.ctx.fillStyle = 'grey';
+        }
         this.textWidth = this.canvas.ctx.measureText(this.text).width;
     }
     checkBounds() {

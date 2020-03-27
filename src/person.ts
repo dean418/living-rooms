@@ -47,10 +47,6 @@ export class Person extends TextEntity {
 		this.speedBoost += 3;
 	}
 
-	public increaseLife(): void {
-		this.maxAge += 10;
-	}
-
 	private checkAge():void {
 		if (this.expired) {
 			return;
@@ -80,7 +76,7 @@ export class Person extends TextEntity {
 			if (this.speedBoost) {
 				this.speedBoost--;
 			} else if (this.dx < -3 || this.dx > 3) {
-				this.increaseSpeed(-2)	
+				this.increaseSpeed(-2)
 			}
 		}, 1000);
 	}

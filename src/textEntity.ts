@@ -64,7 +64,6 @@ export class TextEntity {
 		if (this.left > entity.right) {
 			return false;
 		}
-
 		return true;
 	}
 
@@ -90,11 +89,15 @@ export class TextEntity {
 	private styleText(): void {
 		this.canvas.ctx.font = '16pt arial';
 		this.canvas.ctx.fillStyle = 'white';
+
 		if (this.text == 'virus') {
 			this.canvas.ctx.fillStyle = 'green';
 		} else if(this.text == 'food') {
 			this.canvas.ctx.fillStyle = 'red';
+		} else if(this.text == 'dead') {
+			this.canvas.ctx.fillStyle = 'grey';
 		}
+
 		this.textWidth = this.canvas.ctx.measureText(this.text).width;
 	}
 
