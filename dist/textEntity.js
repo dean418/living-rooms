@@ -24,8 +24,10 @@ export class TextEntity {
     }
     drawText(expired = false) {
         this.styleText();
-        if (!expired) {
-            this.checkBounds();
+        if (expired) {
+        }
+        else {
+            this.move();
         }
         this.canvas.ctx.fillText(this.text, this.x, this.y);
     }
@@ -44,6 +46,16 @@ export class TextEntity {
         }
         return true;
     }
+    move() {
+        if (this.checkTop() || this.checkBottom()) {
+            this.dy = -this.dy;
+        }
+        if (this.checkLeft() || this.checkRight()) {
+            this.dx = -this.dx;
+        }
+        this.x += this.dx;
+        this.y += this.dy;
+    }
     genID() {
         return '_' + Math.random().toString(36).substr(2, 9);
     }
@@ -58,9 +70,7 @@ export class TextEntity {
         }
         return -speed;
     }
-    styleText() {
-        this.canvas.ctx.font = '16pt arial';
-        this.canvas.ctx.fillStyle = 'white';
+    chooseColor() {
         if (this.text == 'virus') {
             this.canvas.ctx.fillStyle = 'green';
         }
@@ -70,16 +80,35 @@ export class TextEntity {
         else if (this.text == 'dead') {
             this.canvas.ctx.fillStyle = 'grey';
         }
+    }
+    styleText() {
+        this.canvas.ctx.font = '16pt arial';
+        this.canvas.ctx.fillStyle = 'white';
+        this.chooseColor();
         this.textWidth = this.canvas.ctx.measureText(this.text).width;
     }
-    checkBounds() {
-        if (this.y + this.dy > this.canvas.height || this.y + this.dy < parseInt(this.canvas.ctx.font)) {
-            this.dy = -this.dy;
+    checkTop() {
+        if (this.y + this.dy > this.canvas.height) {
+            return true;
         }
-        if (this.x + this.dx > this.canvas.width - this.textWidth || this.x + this.dx < 0) {
-            this.dx = -this.dx;
+        return false;
+    }
+    checkBottom() {
+        if (this.y + this.dy < parseInt(this.canvas.ctx.font)) {
+            return true;
         }
-        this.x += this.dx;
-        this.y += this.dy;
+        return false;
+    }
+    checkRight() {
+        if (this.x + this.dx > this.canvas.width - this.textWidth) {
+            return true;
+        }
+        return false;
+    }
+    checkLeft() {
+        if (this.x + this.dx < 0) {
+            return true;
+        }
+        return false;
     }
 }

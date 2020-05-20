@@ -3,6 +3,5 @@ export class Food extends TextEntity {
     constructor() {
         super('food');
     }
-    checkBounds() {
-    }
+    move() { }
 }

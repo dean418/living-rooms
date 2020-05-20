@@ -7,13 +7,9 @@ export class Main {
     constructor() {
         this.canvas = new Canvas();
         this.textEntities = {};
-        this.createEntities();
         this.resetBtn = document.getElementById('reset');
-        this.stopBtn = document.getElementById('stop');
-        this.startBtn = document.getElementById('start');
         this.resetBtn.addEventListener('click', () => this.reset());
-        this.stopBtn.addEventListener('click', (() => this.stop()));
-        this.startBtn.addEventListener('click', (() => this.start()));
+        this.createEntities();
     }
     init() {
         this.outbreak();
@@ -22,22 +18,18 @@ export class Main {
     }
     reset() {
         cancelAnimationFrame(this.animationFrameID);
+        clearInterval(this.outbreakID);
+        clearInterval(this.foodID);
         this.textEntities = {};
         this.createEntities();
+        this.outbreak();
+        this.spawnFood();
         this.main();
-    }
-    stop() {
-        cancelAnimationFrame(this.animationFrameID);
-        this.animationFrameID = 0;
-    }
-    start() {
-        if (!this.animationFrameID) {
-            this.main();
-        }
     }
     createEntities() {
         for (let i = 0; i < 5; i++) {
             let person = new Person(20);
+            this.outOfBounds(person);
             this.textEntities[person.ID] = person;
         }
     }
@@ -53,6 +45,20 @@ export class Main {
             return randInt;
         }
         return -randInt;
+    }
+    outOfBounds(entity) {
+        if (entity.checkTop()) {
+            entity.y -= 20;
+        }
+        if (entity.checkBottom()) {
+            entity.y += 20;
+        }
+        if (entity.checkLeft()) {
+            entity.x += entity.textWidth;
+        }
+        if (entity.checkRight()) {
+            entity.x -= entity.textWidth;
+        }
     }
     testObject() {
         for (let [key, entity] of Object.entries(this.textEntities)) {
@@ -73,19 +79,19 @@ export class Main {
         entities.add(subject.text);
         entities.add(collider.text);
         if (entities.has('male') && entities.has('female')) {
-            this.handlePersonCollision(subject, collider);
+            this.personCollision(subject, collider);
             return;
         }
         if (entities.has('virus') && entities.size > 1 && !entities.has('dead') && !entities.has('food')) {
-            this.handleVirusCollision(subject, collider);
+            this.virusCollision(subject, collider);
             return;
         }
         if (entities.has('food') && !entities.has('dead') && !entities.has('child')) {
-            this.handleFoodCollision(subject, collider);
+            this.foodCollision(subject, collider);
             return;
         }
     }
-    handlePersonCollision(subject, collider) {
+    personCollision(subject, collider) {
         for (const arg of arguments) {
             if (arg.text == 'female') {
                 arg.text = 'mother';
@@ -98,10 +104,11 @@ export class Main {
             let child = new Person();
             child.x = subject.x + this.genRandInt(50, 100);
             child.y = collider.y + this.genRandInt(50, 100);
+            this.outOfBounds(child);
             this.textEntities[child.ID] = child;
         }
     }
-    handleVirusCollision(subject, collider) {
+    virusCollision(subject, collider) {
         for (const entity of arguments) {
             if (entity.text == 'virus') {
                 this.removeEntity(entity);
@@ -111,7 +118,7 @@ export class Main {
             this.removeEntity(entity, 5000);
         }
     }
-    handleFoodCollision(subject, collider) {
+    foodCollision(subject, collider) {
         for (const entity of arguments) {
             if (entity.text == 'food') {
                 this.removeEntity(entity);
@@ -135,7 +142,7 @@ export class Main {
     }
     outbreak() {
         let randNum = new RandNum(50000, 70000).num;
-        setTimeout(() => {
+        this.outbreakID = setTimeout(() => {
             let total = new RandNum(15, 20).num;
             for (let i = 0; i < total; i++) {
                 let virus = new TextEntity('virus');
@@ -146,10 +153,11 @@ export class Main {
     }
     spawnFood() {
         let randNum = new RandNum(5000, 10000).num;
-        setTimeout(() => {
+        this.foodID = setTimeout(() => {
             let foodNum = new RandNum(1, 4).num;
             for (let i = 0; i < foodNum; i++) {
                 let food = new Food();
+                this.outOfBounds(food);
                 this.textEntities[food.ID] = food;
             }
             this.spawnFood();

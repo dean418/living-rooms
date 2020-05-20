@@ -5,7 +5,5 @@ export class Food extends TextEntity {
 		super('food');
 	}
 
-	protected checkBounds(): void{
-		//shrug
-	}
+	protected move(): void{}
 }

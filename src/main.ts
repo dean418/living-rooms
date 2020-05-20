@@ -6,24 +6,19 @@ import {Food} from './food.js';
 
 export class Main {
 	private resetBtn: HTMLElement;
-	private stopBtn: HTMLElement;
-	private startBtn: HTMLElement;
 	private animationFrameID: number;
+	private outbreakID: number;
+	private foodID: number;
 	public textEntities: object;
 	protected canvas: Canvas;
 
 	constructor() {
 		this.canvas = new Canvas();
 		this.textEntities = {}
-		this.createEntities();
-
 		this.resetBtn = document.getElementById('reset');
-		this.stopBtn = document.getElementById('stop');
-		this.startBtn = document.getElementById('start');
-
 		this.resetBtn.addEventListener('click', () => this.reset());
-		this.stopBtn.addEventListener('click', (() => this.stop()));
-		this.startBtn.addEventListener('click', (() => this.start()));
+
+		this.createEntities();
 	}
 
 	public init(): void {
@@ -34,27 +29,22 @@ export class Main {
 
 	private reset(): void {
 		cancelAnimationFrame(this.animationFrameID);
+		clearInterval(this.outbreakID);
+		clearInterval(this.foodID);
 
 		this.textEntities = {};
 		this.createEntities();
-
+		this.outbreak();
+		this.spawnFood();
 		this.main();
-	}
-
-	private stop(): void {
-		cancelAnimationFrame(this.animationFrameID);
-		this.animationFrameID = 0;
-	}
-
-	private start(): void {
-		if (!this.animationFrameID) {
-			this.main();
-		}
 	}
 
 	private createEntities(): void {
 		for (let i = 0; i < 5; i++) {
 			let person: Person = new Person(20);
+
+			this.outOfBounds(person);
+
 			this.textEntities[person.ID] = person;
 		}
 	}
@@ -74,6 +64,24 @@ export class Main {
 			return randInt;
 		}
 		return -randInt;
+	}
+
+	private outOfBounds(entity: TextEntity): void {
+		if (entity.checkTop()) {
+			entity.y -= 20;
+		}
+
+		if (entity.checkBottom()) {
+			entity.y += 20;
+		}
+
+		if (entity.checkLeft()) {
+			entity.x += entity.textWidth;
+		}
+
+		if (entity.checkRight()) {
+			entity.x -= entity.textWidth;
+		}
 	}
 
 	private testObject(): void {
@@ -99,22 +107,22 @@ export class Main {
 		entities.add(collider.text);
 
 		if(entities.has('male') && entities.has('female')) {
-			this.handlePersonCollision(subject, collider);
+			this.personCollision(subject, collider);
 			return;
 		}
 
 		if (entities.has('virus') && entities.size > 1 && !entities.has('dead') && !entities.has('food')) {
-			this.handleVirusCollision(subject, collider);
+			this.virusCollision(subject, collider);
 			return;
 		}
 
 		if (entities.has('food') && !entities.has('dead') && !entities.has('child')) {
-			this.handleFoodCollision(subject, collider);
+			this.foodCollision(subject, collider);
 			return;
 		}
 	}
 
-	private handlePersonCollision(subject: TextEntity, collider: TextEntity): void {
+	private personCollision(subject: TextEntity, collider: TextEntity): void {
 		for (const arg of arguments) {
 			if (arg.text == 'female') {
 				arg.text = 'mother';
@@ -129,11 +137,13 @@ export class Main {
 			child.x = subject.x + this.genRandInt(50, 100);
 			child.y = collider.y + this.genRandInt(50, 100);
 
+			this.outOfBounds(child);
+
 			this.textEntities[child.ID] = child;
 		}
 	}
 
-	private handleVirusCollision(subject: TextEntity, collider: TextEntity): void {
+	private virusCollision(subject: TextEntity, collider: TextEntity): void {
 		for (const entity of arguments) {
 			if (entity.text == 'virus') {
 				this.removeEntity(entity);
@@ -145,7 +155,7 @@ export class Main {
 		}
 	}
 
-	private handleFoodCollision(subject, collider): void {
+	private foodCollision(subject, collider): void {
 		for (const entity of arguments) {
 			if (entity.text == 'food') {
 				this.removeEntity(entity);
@@ -174,7 +184,7 @@ export class Main {
 	public outbreak(): void {
 		let randNum: number = new RandNum(50000, 70000).num;
 
-		setTimeout(() => {
+		this.outbreakID = setTimeout(() => {
 			let total: number = new RandNum(15, 20).num;
 
 			for (let i = 0; i < total; i++) {
@@ -189,11 +199,12 @@ export class Main {
 	private spawnFood(): void {
 		let randNum: number = new RandNum(5000, 10000).num;
 
-		setTimeout(() => {
+		this.foodID = setTimeout(() => {
 			let foodNum: number = new RandNum(1, 4).num;
 
 			for (let i = 0; i < foodNum; i++) {
 				let food = new Food();
+				this.outOfBounds(food);
 				this.textEntities[food.ID] = food;
 			}
 

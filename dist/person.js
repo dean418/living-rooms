@@ -2,7 +2,7 @@ import { TextEntity } from './textEntity.js';
 import { RandNum } from './lib/randNum.js';
 export class Person extends TextEntity {
     constructor(age = 0) {
-        super(undefined);
+        super('');
         this.age = age;
         this.maxAge = new RandNum(60, 100).num;
         this.expired = false;

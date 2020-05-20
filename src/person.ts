@@ -11,7 +11,7 @@ export class Person extends TextEntity {
 	private speedBoost: number;
 
 	constructor(age: number=0) {
-		super(undefined);
+		super('');
 
 		this.age = age;
 		this.maxAge = new RandNum(60, 100).num;
